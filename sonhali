@@ -186,7 +186,7 @@ def kitap_işlemleri():
     kitabi_getir()
 
 def addBook():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     sql="insert into kitap (isbn,baslik,yayinevi,kutuphane_id) values (%s,%s,%s,%s)"
     val=(kitapIsbn.get(),kitapBaslik.get(),kitapYayinevi.get(),"2")
@@ -200,7 +200,7 @@ def addBook():
     
 
 def kitabi_getir():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     mycursor.execute("select * from kitap")
     rows=mycursor.fetchall()
@@ -288,7 +288,7 @@ def alinan_kitaplar():
 
 
 def addkitap():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     sql="insert into alinan_kitaplar (emanet_no,alis_tarihi,teslim_tarihi,uye_id,kitap_isbn,kutuphane_id) values (%s,%s,%s,%s,%s,%s)"
     val=(emanetNo.get(),alisTarihi.get(),teslimTarihi.get(),"2","42","1")
@@ -302,7 +302,7 @@ def addkitap():
     
 
 def alinankitabi_getir():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     mycursor.execute("select * from alinan_kitaplar")
     rows=mycursor.fetchall()
@@ -578,7 +578,7 @@ def kategori():
 
 
 def addKategori():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     sql="insert into kategori (kategori_id,kategori_adi) values (%s,%s)"
     val=(kategoriId.get(),kategoriAd.get())
@@ -592,7 +592,7 @@ def addKategori():
     
 
 def kategoriyi_getir():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     mycursor.execute("select * from kategori")
     rows=mycursor.fetchall()
@@ -672,7 +672,7 @@ def yazar():
 
 
 def addYazar():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     sql="insert into yazar (yazar_id,yazar_ad,yazar_soyad) values (%s,%s,%s)"
     val=(yazarId.get(),yazarAd.get(),yazarSoyad.get())
@@ -686,7 +686,7 @@ def addYazar():
     
 
 def yazari_getir():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     mycursor.execute("select * from yazar")
     rows=mycursor.fetchall()
@@ -765,7 +765,7 @@ def adres():
 
 
 def addAddress():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     sql="insert into adres (adres_no,adres_bilgisi) values (%s,%s)"
     val=(adresNo.get(),adresBilgisi.get())
@@ -779,7 +779,7 @@ def addAddress():
     
 
 def adresi_getir():
-    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    conn=mysql.connector.connect(host="localhost",user="root",password="",database="kutuphane")
     mycursor=conn.cursor()
     mycursor.execute("select * from adres")
     rows=mycursor.fetchall()
