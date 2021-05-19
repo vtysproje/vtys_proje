@@ -1,0 +1,94 @@
+def adres():
+    global headingFrame1,headingFrame2,headingLabel,test,btn1,btn2,Canvas1,adres_table,adresNo,adresBilgisi
+    headingFrame1.destroy()
+    headingFrame2.destroy()
+    headingLabel.destroy()
+    Canvas1.destroy()
+    btn1.destroy()
+    btn2.destroy()
+    
+
+    Canvas1 = Canvas(root)
+
+    Canvas1.config(bg="white",width = newImageSizeWidth, height = newImageSizeHeight)
+    Canvas1.pack(expand=True,fill=BOTH)
+
+    
+    
+    manage_frame=Frame(root,bd=4,relief=RIDGE,bg="#e03456").place(x=20,y=100,width=500,height=560)
+    manage_title=Label(manage_frame,text="Adres",fg="white",bg="#e03456",font=("times new roman",20,"bold")).place(x=25,y=110)
+           
+    adresNo=StringVar()
+    adresBilgisi=StringVar()
+    
+    label_roll=Label(manage_frame,text="Adres No",fg="white",bg="#e03456",font=("times new roman",20,"bold")).place(x=25,y=150)
+    txt_no=Entry(manage_frame,bd=5,relief=GROOVE,textvariable=adresNo,font=("times new roman",15,"bold")).place(x=200,y=150)
+
+    label_roll=Label(manage_frame,text="Adres Bilgisi",bg="#e03456",fg="white",font=("times new roman",20,"bold")).place(x=25,y=200)
+    txt_bilgi=Entry(manage_frame,bd=5,relief=GROOVE,textvariable=adresBilgisi,font=("times new roman",15,"bold")).place(x=200,y=200)
+
+    
+    
+
+    button_frame=Frame(manage_frame,bd=4,relief=RIDGE, bg="#e03456").place(x=10,y=480,width=430)
+    addbtn=Button(button_frame,text="Ekle",command=addAddress,width=10,height=2).place(x=100,y=500)
+    updatebtn=Button(button_frame,text="Güncelle",width=10,height=2).place(x=200,y=500)
+    deletebtn=Button(button_frame,text="Sil",width=10,height=2).place(x=300,y=500)
+    clearbtn=Button(button_frame,text="Temizle",width=10,height=2).place(x=400,y=500)
+
+
+
+    
+    table_frame=Frame(root,bd=4,relief=RIDGE,bg='#e03456')
+    table_frame.place(x=560,y=100,width=780,height=570)
+
+    scroll_x=Scrollbar(table_frame,orient=HORIZONTAL)
+    scroll_y=Scrollbar(table_frame,orient=VERTICAL)    
+    adres_table=ttk.Treeview(table_frame,columns=("Adres No","Adres Bilgisi"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+    scroll_x.pack(side=BOTTOM,fill=X)
+    scroll_y.pack(side=RIGHT,fill=Y)
+    scroll_x.config(command=adres_table.xview)
+    scroll_x.config(command=adres_table.yview)
+    adres_table.heading("Adres No",text="Adres No")
+    adres_table.heading("Adres Bilgisi",text="Adres Bilgisi")
+    adres_table['show']='headings'
+    adres_table.column("Adres No",width=450)
+    adres_table.column("Adres Bilgisi",width=450)
+     
+    adres_table.pack()
+    adresi_getir()
+
+    quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
+    quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
+
+
+
+
+def addAddress():
+    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    mycursor=conn.cursor()
+    sql="insert into adres (adres_no,adres_bilgisi) values (%s,%s)"
+    val=(adresNo.get(),adresBilgisi.get())
+    mycursor.execute(sql,val)
+    conn.commit()
+    adresi_getir()
+    conn.close()
+
+    
+
+    
+
+def adresi_getir():
+    conn=mysql.connector.connect(host="localhost",user="root",password="Nrsd76012MySQL",database="kutuphane")
+    mycursor=conn.cursor()
+    mycursor.execute("select * from adres")
+    rows=mycursor.fetchall()
+    if len(rows) !=0:
+        adres_table.delete(*adres_table.get_children())
+        for row in rows:
+            adres_table.insert("",END,values=row)
+        conn.commit()
+    conn.close()
+
+    
+    
