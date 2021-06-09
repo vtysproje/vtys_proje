@@ -100,7 +100,6 @@ def kitap_işlemleri():
     detail_frame=Frame(root,bd=4,relief=RIDGE,bg="#e03456").place(x=550,y=100,width=800,height=560)
     search_label=Label(detail_frame,text="Ara",bg="#e03456",fg="white",font=("times new roman",24,"bold")).place(x=580,y=105)
 
-    widget_var = tk.StringVar()
 
     vlist=["ISBN", "Yazar", "Kategori"]
     
@@ -125,12 +124,81 @@ def kitap_işlemleri():
         cursor = cnx.cursor()
 
         secilen=combo_search.get()
-        print(secilen)
 
         metin=girilen.get()
         
         if secilen == "ISBN":
             kitapgetir()
+        elif secilen =="Yazar":
+            yazararama()
+        elif secilen =="Kategori":
+            kategoriarama()
+
+    
+    def kategoriarama():
+        conn=mysql.connector.connect(host="127.0.0.1",user="root",password="1234",database="sakila")
+        mycursor=conn.cursor()
+
+        #mycursor.execute("SELECT kategori_id FROM kategori_tablosu WHERE kategori_adi = '%s'" % girilen.get())
+
+        #rows2=mycursor.fetchall()
+
+        #for row in rows2:
+        #    print("data row=(%s)" %str(row[0]))
+
+        
+        #mycursor.execute("SELECT kitap_tablosu.kitap_isbn,kitap_tablosu.kitap_baslik,kitap_tablosu.kitap_yayinevi,kitap_tablosu.kitap_kutuphane_id FROM (( kitap_tablosu INNER JOIN kategorikitap_tablosu ON kitap_tablosu.kitap_isbn=kategorikitap_tablosu.ktk_kitap_isbn) INNER JOIN kategori_tablosu ON kategorikitap_tablosu.ktk_kategori_id='%s')" %str(row[0]))
+
+
+
+
+        mycursor.execute("SELECT kitap_tablosu.kitap_isbn,kitap_tablosu.kitap_baslik,kitap_tablosu.kitap_yayinevi,kitap_tablosu.kitap_kutuphane_id " \
+    "FROM kitap_tablosu " \
+    "INNER JOIN kategorikitap_tablosu ON kitap_tablosu.kitap_isbn=kategorikitap_tablosu.ktk_kitap_isbn " \
+    "INNER JOIN kategori_tablosu ON kategorikitap_tablosu.ktk_kategori_id=kategori_tablosu.kategori_id WHERE kategori_tablosu.kategori_adi='%s'" % girilen.get())
+
+
+        
+        
+
+        rows=mycursor.fetchall()
+
+        if len(rows) !=0:
+            kitap_table.delete(*kitap_table.get_children())
+            for row in rows:
+                kitap_table.insert("",END,values=row)
+            conn.commit()
+        conn.close()
+
+        
+
+
+
+
+    def yazararama():
+        conn=mysql.connector.connect(host="127.0.0.1",user="root",password="1234",database="sakila")
+        mycursor=conn.cursor()
+
+        
+        mycursor.execute("SELECT yazar_id FROM yazar_tablosu WHERE yazar_ad = '%s'" % girilen.get())
+
+        rows2=mycursor.fetchall()
+
+        for row in rows2:
+            print("data row=(%s)" %str(row[0]))
+
+        mycursor.execute("SELECT kitap_tablosu.kitap_isbn,kitap_tablosu.kitap_baslik,kitap_tablosu.kitap_yayinevi,kitap_tablosu.kitap_kutuphane_id FROM ((kitap_tablosu INNER JOIN kitapyazar_tablosu ON kitap_tablosu.kitap_isbn=kitapyazar_tablosu.kty_kitap_isbn) INNER JOIN yazar_tablosu ON kitapyazar_tablosu.kty_yazar_id='%s')" % str(row[0]))
+
+        rows=mycursor.fetchall()
+        
+        if len(rows) !=0:
+            kitap_table.delete(*kitap_table.get_children())
+            for row in rows:
+                kitap_table.insert("",END,values=row)
+            conn.commit()
+        conn.close()
+
+
             
     def kitapgetir():
         conn=mysql.connector.connect(host="127.0.0.1",user="root",password="1234",database="sakila")
@@ -248,14 +316,59 @@ def alinan_kitaplar():
     Canvas1.config(bg="white",width = newImageSizeWidth, height = newImageSizeHeight)
     Canvas1.pack(expand=True,fill=BOTH)
 
+    #yenieklenen
+    manage_frame=Frame(root,bd=4,relief=RIDGE,bg="#e03456").place(x=20,y=100,width=500,height=560)
+    manage_title=Label(manage_frame,text="Alınan Kitaplar",fg="white",bg="#e03456",font=("times new roman",20,"bold")).place(x=25,y=110)
+
+    
+
 
     
     table_frame=Frame(root,bd=4,relief=RIDGE,bg='#e03456')
-    table_frame.place(x=300,y=170,width=900,height=480)
+    table_frame.place(x=560,y=100,width=780,height=580)
+
+
+
+    emanetNo=StringVar()
+    alisTarihi=StringVar()
+    teslimTarihi=StringVar()
+    uyeID=StringVar()
+    kitapISBN=StringVar()
+    kutuphaneID=StringVar()
+
+
+
+    label_roll=Label(manage_frame,text="Format:Yıl/Ay/Gün",fg="white",bg="#e03456",font=("times new roman",20,"bold")).place(x=25,y=150)
+    #txt_roll=Entry(manage_frame,bd=5,relief=GROOVE,textvariable=emanetNo,font=("times new roman",15,"bold")).place(x=200,y=150)
+
+    label_roll=Label(manage_frame,text="ISBN",bg="#e03456",fg="white",font=("times new roman",20,"bold")).place(x=25,y=200)
+    txt_roll=Entry(manage_frame,bd=5,relief=GROOVE,textvariable=kitapISBN,font=("times new roman",15,"bold")).place(x=200,y=200)
+
+    label_roll=Label(manage_frame,text="Alış Tarihi",bg="#e03456",fg="white",font=("times new roman",20,"bold")).place(x=25,y=250)
+    txt_roll=Entry(manage_frame,bd=5,relief=GROOVE,textvariable=alisTarihi,font=("times new roman",15,"bold")).place(x=200,y=250)
+
+    #label_roll=Label(manage_frame,text="Teslim Tarihi",bg="#e03456",fg="white",font=("times new roman",20,"bold")).place(x=25,y=300)
+    #txt_roll=Entry(manage_frame,bd=5,relief=GROOVE,textvariable=teslimTarihi,font=("times new roman",15,"bold")).place(x=200,y=300)
+
+
+
+    button_frame=Frame(manage_frame,bd=4,relief=RIDGE, bg="#e03456").place(x=10,y=480,width=430)
+    #addbtn=Button(button_frame,text="Ekle",command=addkitap,width=10,height=2).place(x=100,y=500)
+    #updatebtn=Button(button_frame,text="Güncelle",command=alinankitapGuncelle,width=10,height=2).place(x=200,y=500)
+    #deletebtn=Button(button_frame,text="Sil",command=alinankitapSil,width=10,height=2).place(x=300,y=500)
+    #clearbtn=Button(button_frame,text="Temizle",command=alinanSil,width=10,height=2).place(x=400,y=500)
+
+
+
+
+    
+
+    
+    
 
     scroll_x=Scrollbar(table_frame,orient=HORIZONTAL)
     scroll_y=Scrollbar(table_frame,orient=VERTICAL)    
-    kitap_table=ttk.Treeview(table_frame,columns=("Emanet No","Alış Tarihi","Teslim Tarihi","Üye İd","ISBN","Kütüphane İd"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+    kitap_table=ttk.Treeview(table_frame,columns=("Emanet No","Alış Tarihi","Teslim Tarihi","Üye İd","ISBN","Kütüphane İd","Kitap Adı","Yazar Adı","Yazar Soyadı","Kütüphane Adı"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
     scroll_x.pack(side=BOTTOM,fill=X)
     scroll_y.pack(side=RIGHT,fill=Y)
     scroll_x.config(command=kitap_table.xview)
@@ -266,20 +379,132 @@ def alinan_kitaplar():
     kitap_table.heading("Üye İd",text="Üye İd")
     kitap_table.heading("ISBN",text="ISBN")
     kitap_table.heading("Kütüphane İd",text="Kütüphane İd")
+    kitap_table.heading("Kitap Adı",text="Kitap Adı")
+    kitap_table.heading("Yazar Adı",text="Yazar Adı")
+    kitap_table.heading("Yazar Soyadı",text="Yazar Soyadı")
+    kitap_table.heading("Kütüphane Adı",text="Kütüphane Adı")
     kitap_table['show']='headings'
-    kitap_table.column("Emanet No",width=145)
-    kitap_table.column("Alış Tarihi",width=145)
-    kitap_table.column("Teslim Tarihi",width=145)
-    kitap_table.column("Üye İd",width=145)
-    kitap_table.column("ISBN",width=145)
-    kitap_table.column("Kütüphane İd",width=145)
+    kitap_table.column("Emanet No",width=100)
+    kitap_table.column("Alış Tarihi",width=100)
+    kitap_table.column("Teslim Tarihi",width=100)
+    kitap_table.column("Üye İd",width=70)
+    kitap_table.column("ISBN",width=60)
+    kitap_table.column("Kütüphane İd",width=90)
+    kitap_table.column("Kitap Adı",width=100)
+    kitap_table.column("Yazar Adı",width=100)
+    kitap_table.column("Yazar Soyadı",width=100)
+    kitap_table.column("Kütüphane Adı",width=100)
      
     kitap_table.pack()
+    #kitap_table.bind("<ButtonRelease-1>",kitap_getCursor)
+    #alinankitabi_getir()
 
     quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
     quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
 
+
+
     
+
+    def addkitap():
+        conn=mysql.connector.connect(host="127.0.0.1",user="root",password="1234",database="sakila")
+        mycursor=conn.cursor()
+        #sql2="select uyeler.uye_id,alinan_kitaplar.kutuphane_id from uyeler INNER JOIN alinan_kitaplar on uyeler.uye_id=alinan_kitaplar.uye_id"
+        #sql="select from uyeler,kutuphaneler,uye-kutuphane where uye-kutuphane.uye_id=uyeler.uye_id and uye-kutuphane.kutuphane_id=kutuphaneler.kutuphane_id"
+        #mycursor.execute(sql2)
+        #sql="insert into alinan_kitaplar (alis_tarihi,teslim_tarihi,uye_id,isbn,kutuphane_id) select (uye_id,kutuphane_id) from uye-kutuphane where uye-kutuphane.uye_id=alinan_kitaplar.uye_id and uye-kutuphane.kutuphane_id=alinan_kitaplar.kutuphane_id"
+        #sql="(insert into (uye_id,isbn,alis_tarihi,teslim_tarihi,kutuphane_id) select from alinan_kitaplar where uye_id=%s and kutuphane_id=%s)"
+
+
+        mycursor.execute("SELECT ADDDATE('%s', INTERVAL 2 MONTH)" % alisTarihi.get())
+
+        degisken=mycursor.fetchall()
+
+        for row in degisken:
+            teslimtarihi=str(row[0])
+
+
+        mycursor.execute("SELECT kitap_kutuphane_id FROM kitap_tablosu WHERE kitap_isbn='%s'" % kitapISBN.get())
+
+        degisken2=mycursor.fetchall()
+
+        for row in degisken2:
+            kitabinisbn=str(row[0])
+
+        
+
+
+        sql="insert into alinan_tablosu (alinan_uye_id,alinan_kitap_isbn,alinan_alis_tarihi,alinan_teslim_tarihi,alinan_kutuphane_id) values (%s,%s,%s,%s,%s)"
+        val=('89',kitapISBN.get(),alisTarihi.get(),teslimtarihi,kitabinisbn)
+        mycursor.execute(sql,val)
+        conn.commit()
+        alinankitabi_getir()
+        conn.close()
+
+    def alinankitabi_getir():
+        conn=mysql.connector.connect(host="127.0.0.1",user="root",password="1234",database="sakila")
+        mycursor=conn.cursor()
+
+        mycursor.execute("SELECT alinan_tablosu.alinan_emanet_no,alinan_tablosu.alinan_alis_tarihi,alinan_tablosu.alinan_teslim_tarihi,alinan_tablosu.alinan_uye_id,alinan_tablosu.alinan_kitap_isbn,alinan_tablosu.alinan_kutuphane_id,kitap_tablosu.kitap_baslik,yazar_tablosu.yazar_ad,yazar_tablosu.yazar_soyad,kutuphane_tablosu.kutuphane_isim " \
+      "FROM alinan_tablosu " \
+      "INNER JOIN kitap_tablosu ON alinan_tablosu.alinan_kitap_isbn=kitap_tablosu.kitap_isbn " \
+      "INNER JOIN kitapyazar_tablosu ON kitap_tablosu.kitap_isbn=kitapyazar_tablosu.kty_kitap_isbn " \
+      "INNER JOIN yazar_tablosu ON kitapyazar_tablosu.kty_yazar_id=yazar_tablosu.yazar_id " \
+      "INNER JOIN kutuphane_tablosu ON kitap_tablosu.kitap_kutuphane_id=kutuphane_tablosu.kutuphane_id")
+
+
+        rows=mycursor.fetchall()
+        if len(rows) !=0:
+                kitap_table.delete(*kitap_table.get_children())
+        for row in rows:
+                kitap_table.insert("",END,values=row)
+
+
+
+        conn.commit()
+        conn.close()
+
+    def kitap_getCursor(root):
+        cursor_row=kitap_table.focus()
+        veriler=kitap_table.item(cursor_row)
+        row=veriler['values']
+        kitapISBN.set(row[2])
+        alisTarihi.set(row[3])
+        teslimTarihi.set(row[4])
+
+    def alinankitapSil():
+        conn=mysql.connector.connect(host="127.0.0.1",user="root",password="1234",database="sakila")
+        mycursor=conn.cursor()
+        mycursor.execute("delete from alinan_tablosu where alinan_kitap_isbn=%s",[kitapISBN.get()])
+        conn.commit()
+        alinankitabi_getir()
+        alinanSil()
+        conn.close()
+    
+    def alinankitapGuncelle():
+        conn=mysql.connector.connect(host="127.0.0.1",user="root",password="1234",database="sakila")
+        mycursor=conn.cursor()
+        mycursor.execute("update alinan_tablosu set alinan_emanet_no=%s,alinan_uye_id=%s,alinan_alis_tarihi=%s,alinan_teslim_tarihi=%s,alinan_kutuphane_id=%s where alinan_kitap_isbn=%s",(1,45,alisTarihi.get(),teslimTarihi.get(),1,kitapISBN.get()))
+        conn.commit()
+        alinankitabi_getir()
+        conn.close()
+    
+    def alinanSil():
+        kitapISBN.set("")
+        alisTarihi.set("")
+        teslimTarihi.set("")
+
+
+
+    kitap_table.bind("<ButtonRelease-1>",kitap_getCursor)
+    alinankitabi_getir()
+    
+
+    addbtn=Button(button_frame,text="Ekle",command=addkitap,width=10,height=2).place(x=100,y=500)    
+    updatebtn=Button(button_frame,text="Güncelle",command=alinankitapGuncelle,width=10,height=2).place(x=200,y=500)
+    deletebtn=Button(button_frame,text="Sil",command=alinankitapSil,width=10,height=2).place(x=300,y=500)
+    clearbtn=Button(button_frame,text="Temizle",command=alinanSil,width=10,height=2).place(x=400,y=500)
+
 
 
 
@@ -386,6 +611,8 @@ def uye():
         sqls="SELECT uye_mail FROM uye_tablosu WHERE uye_mail = '%s'" % val2
         mycursor.execute(sql)
         uyeadi=mycursor.fetchall()
+
+        print(uyeadi)
 
         mycursor.execute(sqls)
         uyemail=mycursor.fetchall()
