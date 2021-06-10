@@ -1,0 +1,92 @@
+alış tarihi için:
+from datetime import datetime  
+
+alinan_kitaplar fonksiyonu içerisine
+
+an=datetime.now()
+alisTarihi=datetime.strftime(an, '%d-%m-%Y')
+
+label_roll=Label(manage_frame,text="Format:Yıl/Ay/Gün",fg="white",bg="#e03456",font=("times new roman",20,"bold")).place(x=25,y=150) => bu kısmı silebiliriz
+val=(alisTarihi,...) addKitap da val kısmı bu şekilde
+
+kitap iade için:
+def kitapIade():
+    global headingFrame1,headingFrame2,headingLabel,btn1,btn2,Canvas1,kitapIsbn,kitapBaslik,kitapYayinevi,kitapIade_table
+    headingFrame1.destroy()
+    headingFrame2.destroy()
+    headingLabel.destroy()
+    Canvas1.destroy()
+    btn1.destroy()
+    btn2.destroy()
+    
+
+    Canvas1 = Canvas(root)
+
+    Canvas1.config(bg="white",width = newImageSizeWidth, height = newImageSizeHeight)
+    Canvas1.pack(expand=True,fill=BOTH)
+
+    
+    table_frame=Frame(root,bd=4,relief=RIDGE,bg='#e03456')
+    table_frame.place(x=300,y=100,width=900,height=580)
+
+    scroll_x=Scrollbar(table_frame,orient=HORIZONTAL)
+    scroll_y=Scrollbar(table_frame,orient=VERTICAL)    
+    kitapIade_table=ttk.Treeview(table_frame,columns=("Id","Üye İd","ISBN"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+    scroll_x.pack(side=BOTTOM,fill=X)
+    scroll_y.pack(side=RIGHT,fill=Y)
+    scroll_x.config(command=kitapIade_table.xview)
+    scroll_x.config(command=kitapIade_table.yview)
+    kitapIade_table.heading("Id",text="Id")
+    kitapIade_table.heading("Üye İd",text="Üye İd")
+    kitapIade_table.heading("ISBN",text="ISBN")
+    kitapIade_table['show']='headings'
+    kitapIade_table.column("Id",width=145)
+    kitapIade_table.column("Üye İd",width=145)
+    kitapIade_table.column("ISBN",width=145)
+    Iadekitabi_getir()
+    kitapIade_table.pack()
+
+    iadeBtn = Button(root,text="İade Et",bg='#455A64', fg='white',font=("arial",15,"bold"),command=kitapTeslim)
+    iadeBtn.place(relx=0.5,rely=0.9, relwidth=0.18,relheight=0.08)
+    
+    quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
+    quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
+
+def Iadekitabi_getir():
+    conn=mysql.connector.connect(host="localhost",user="root",password="12345",database="kutuphane")
+    mycursor=conn.cursor()
+    mycursor.execute("select * from uye_kitap")
+    rows=mycursor.fetchall()
+    if len(rows) !=0:
+        kitapIade_table.delete(*kitapIade_table.get_children())
+        for row in rows:
+            kitapIade_table.insert("",END,values=row)
+        conn.commit()
+    conn.close()
+
+def kitapTeslim():
+    conn=mysql.connector.connect(host="localhost",user="root",password="12345",database="kutuphane")
+    mycursor=conn.cursor()
+    mycursor.execute("delete from uye_kitap where kitap_isbn=4528")
+    rows=mycursor.fetchall()
+    if len(rows) !=0:
+        kitapIade_table.delete(*kitapIade_table.get_children())
+    
+    conn.commit()
+    Iadekitabi_getir()
+    conn.close()
+
+
+Emp menu kısmında
+
+  btn6=Button(root,text="Kitap İade",bg='black', fg='white',font=("arial",15,"bold"),command=kitapIade)
+  btn6.place(relx=0.28,rely=0.85, relwidth=0.45,relheight=0.1)
+        
+  backBtn = Button(root,text="<- Geri",bg='#455A64', fg='white',font=("arial",15,"bold"), command=uye)
+  backBtn.place(relx=0.8,rely=0.9, relwidth=0.18,relheight=0.08)
+
+
+
+
+
+
