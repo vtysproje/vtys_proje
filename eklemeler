@@ -11,7 +11,7 @@ val=(alisTarihi,...) addKitap da val kısmı bu şekilde
 
 kitap iade için:
 def kitapIade():
-    global headingFrame1,headingFrame2,headingLabel,btn1,btn2,Canvas1,kitapIsbn,kitapBaslik,kitapYayinevi,kitapIade_table
+    global headingFrame1,headingFrame2,headingLabel,btn1,btn2,Canvas1,kitapIsbn,kitapBaslik,kitapYayinevi,kitapIade_table,Id,uyeId
     headingFrame1.destroy()
     headingFrame2.destroy()
     headingLabel.destroy()
@@ -24,6 +24,16 @@ def kitapIade():
 
     Canvas1.config(bg="white",width = newImageSizeWidth, height = newImageSizeHeight)
     Canvas1.pack(expand=True,fill=BOTH)
+
+    manage_frame=Frame(root,bd=4,relief=RIDGE,bg="#e03456").place(x=450,y=10,width=600,height=100)
+    manage_title=Label(manage_frame,text="İade edilecek kitabın ISBN bilgisini giriniz.",fg="white",bg="#e03456",font=("times new roman",20,"bold")).place(x=455,y=15)
+
+    Id=StringVar()
+    uyeId=StringVar()
+    kitapIsbn=StringVar()
+    
+    
+    txt_roll=Entry(manage_frame,bd=5,relief=GROOVE,textvariable=kitapIsbn,font=("times new roman",15,"bold")).place(x=620,y=55)
 
     
     table_frame=Frame(root,bd=4,relief=RIDGE,bg='#e03456')
@@ -45,6 +55,8 @@ def kitapIade():
     kitapIade_table.column("ISBN",width=145)
     Iadekitabi_getir()
     kitapIade_table.pack()
+    kitapIade_table.bind("<ButtonRelease-1>",kitapIade_getCursor)
+    
 
     iadeBtn = Button(root,text="İade Et",bg='#455A64', fg='white',font=("arial",15,"bold"),command=kitapTeslim)
     iadeBtn.place(relx=0.5,rely=0.9, relwidth=0.18,relheight=0.08)
@@ -67,14 +79,29 @@ def Iadekitabi_getir():
 def kitapTeslim():
     conn=mysql.connector.connect(host="localhost",user="root",password="12345",database="kutuphane")
     mycursor=conn.cursor()
-    mycursor.execute("delete from uye_kitap where kitap_isbn=4528")
-    rows=mycursor.fetchall()
-    if len(rows) !=0:
-        kitapIade_table.delete(*kitapIade_table.get_children())
-    
+    mycursor.execute("delete from uye_kitap where kitap_isbn=%s",[kitapIsbn.get()])
     conn.commit()
     Iadekitabi_getir()
+    kitapSil()
     conn.close()
+    
+def kitapSil():
+    Id.set("")
+    uyeId.set("")
+    kitapIsbn.set("")
+
+
+
+def kitapIade_getCursor(root):
+    cursor_row=kitapIade_table.focus()
+    veriler=kitapIade_table.item(cursor_row)
+    row=veriler['values']
+    Id.set(row[0])
+    uyeId.set(row[1])
+    kitapIsbn.set(row[2])
+
+    
+
 
 
 Emp menu kısmında
