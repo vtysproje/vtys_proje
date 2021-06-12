@@ -1,0 +1,91 @@
+bu kısım da üyeyi kontrolden geçtikten sonra ekler
+def addMember():
+    conn=mysql.connector.connect(host="localhost",user="root",password="12345",database="kutuphane")
+    mycursor=conn.cursor()
+    mycursor.execute("select uye_adi,uye_mail from uyeler")
+    rows=mycursor.fetchall()
+    for row in rows:
+        if((row[0]==uyeAd.get())):
+            messagebox.showerror("Hata",uyeAd.get() +" kullanıcı adı sistemde mevcut")
+            return False
+        elif(row[1]==uyeMail.get()):
+            messagebox.showerror("Hata",uyeMail.get() + " mail adresi sistemde mevcut")
+            return False
+    
+    if (checkUser()):
+        sql="insert into uyeler (uye_adi,uye_soyadi,uye_tel,uye_mail,uye_adres) values (%s,%s,%s,%s,%s)"
+        val=(uyeAd.get(),uyeSoyad.get(),uyeTel.get(),uyeMail.get(),uyeAdres.get())
+        mycursor.execute(sql,val)
+        messagebox.showinfo("Geçerli","Kayıt Başarılı")
+        
+    conn.commit()
+    conn.close()
+
+
+
+
+
+
+kayıt fonksiyonunun altına koyabilirsin kayıt ol kısmındaki kontroller bunlar
+
+def checkUser():
+
+    if len(uyeMail.get())>7:
+        if re.match("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",uyeMail.get()):
+            return True
+        else:
+            messagebox.showwarning("Uyarı","Geçersiz mail")
+            return False
+    
+    
+    if uyeAd.get() == '':
+        messagebox.showerror("Hata","Kullanıcı adı alanı boş bırakılamaz")
+    elif uyeSoyad.get() == '':
+        messagebox.showerror("Hata","Kullanıcı soyad alanı boş bırakılamaz")
+    elif not(uyeTel.get().isdigit()):
+        messagebox.showerror("Hata","Telefon alanı numara olamlıdır")
+    elif uyeTel.get() == '':
+        messagebox.showerror("Hata","Kullanıcı id alanı numara olmalıdır")
+    elif len(uyeTel.get())!= 11:
+         messagebox.showerror("Hata","Telefon alanı 11 karakter içermelidir")
+    elif uyeMail.get() == '':
+        messagebox.showerror("Hata","Mail alanı boş bırakılamaz")
+    elif uyeAdres.get() == '':
+        messagebox.showerror("Hata","Adres alanı boş bırakılamaz")
+     
+    else:
+        messagebox.showinfo("Uyarı","Mail çok kısa") 
+
+
+
+def giris():
+    conn=mysql.connector.connect(host="localhost",user="root",password="12345",database="kutuphane")
+    mycursor=conn.cursor()
+    mycursor.execute("select uye_adi,uye_mail from uyeler")
+    rows=mycursor.fetchall()
+   
+    for row in rows:
+        if(row[0]==kullaniciAd.get() and row[1]==kullaniciMail.get()):
+            return True
+        
+        conn.commit()
+    conn.close()
+
+
+emp menunun hemen altına
+if (giris()):
+
+----- butonlar var burda
+
+else:
+      messagebox.showwarning("Hata","Giriş başarısız!")
+
+
+
+
+
+
+
+
+
+
