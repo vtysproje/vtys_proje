@@ -478,6 +478,25 @@ def alinan_kitaplar():
         sql="insert into alinan_tablosu (alinan_uye_id,alinan_kitap_isbn,alinan_alis_tarihi,alinan_teslim_tarihi,alinan_kutuphane_id) values (%s,%s,%s,%s,%s)"
         val=(uyeid,kitapISBN.get(),alisTarihi,teslimtarihi,kutuphaneid)
         mycursor.execute(sql,val)
+
+
+
+
+        mycursor.execute("SELECT alinan_emanet_no FROM alinan_tablosu WHERE alinan_kitap_isbn='%s'" % kitapISBN.get())
+
+        rows=mycursor.fetchall()
+
+        for row in rows:
+            emanetnosu=str(row[0])
+
+
+        sqlkomut="INSERT INTO uyekitap_tablosu (uye_id,emanet_no) VALUES (%s,%s)"
+        val=(uyeid,emanetnosu)
+        mycursor.execute(sqlkomut,val)
+
+
+        
+
         conn.commit()
         alinankitabi_getir()
         conn.close()
