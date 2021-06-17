@@ -78,7 +78,7 @@ def kutuphane():
     
 
     quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
-    quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
+    quitBtn.place(relx=0.02,rely=0.9, relwidth=0.18,relheight=0.08)
 
 
 def kitap_işlemleri():
@@ -325,7 +325,7 @@ def kitap_işlemleri():
     show_allbtn=Button(detail_frame,text="Tüm Kitapları Göster",command=tumkitapgetir,width=15,pady=5).place(x=850,y=112)
 
     quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
-    quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
+    quitBtn.place(relx=0.02,rely=0.9, relwidth=0.18,relheight=0.08)
     
     table_frame=Frame(detail_frame,bd=4,relief=RIDGE,bg='#e03456')
     table_frame.place(x=310,y=170,width=900,height=480)
@@ -362,7 +362,7 @@ def alinan_kitaplar():
     Canvas1.pack(expand=True,fill=BOTH)
 
     #yenieklenen
-    manage_frame=Frame(root,bd=4,relief=RIDGE,bg="#e03456").place(x=20,y=100,width=500,height=560)
+    manage_frame=Frame(root,bd=4,relief=RIDGE,bg="#e03456").place(x=20,y=100,width=500,height=480)
     manage_title=Label(manage_frame,text="Alınan Kitaplar",fg="white",bg="#e03456",font=("times new roman",20,"bold")).place(x=25,y=110)
 
     
@@ -450,7 +450,7 @@ def alinan_kitaplar():
     #alinankitabi_getir()
 
     quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
-    quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
+    quitBtn.place(relx=0.02,rely=0.9, relwidth=0.18,relheight=0.08)
 
 
 
@@ -604,7 +604,7 @@ def kitapIade():
         
     
     table_frame=Frame(root,bd=4,relief=RIDGE,bg='#e03456')
-    table_frame.place(x=300,y=100,width=900,height=580)
+    table_frame.place(x=300,y=100,width=900,height=500)
 
     scroll_x=Scrollbar(table_frame,orient=HORIZONTAL)
     scroll_y=Scrollbar(table_frame,orient=VERTICAL)    
@@ -711,10 +711,10 @@ def kitapIade():
         conn.close()
     
     iadeBtn = Button(root,text="İade Et",bg='#455A64', fg='white',font=("arial",15,"bold"),command=kitapTeslim)
-    iadeBtn.place(relx=0.5,rely=0.9, relwidth=0.18,relheight=0.08)
+    iadeBtn.place(relx=0.55,rely=0.9, relwidth=0.18,relheight=0.08)
     
     quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
-    quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
+    quitBtn.place(relx=0.35,rely=0.9, relwidth=0.18,relheight=0.08)
 
 
 
@@ -747,22 +747,22 @@ def empMenu():
     headingLabel.place(relx=0.25,rely=0.15, relwidth=0.5, relheight=0.5)
     
     btn1 = Button(root,text="Kitap İşlemleri",bg='black', fg='white',font=("arial",15,"bold"),command=kitap_işlemleri)
-    btn1.place(relx=0.28,rely=0.3, relwidth=0.45,relheight=0.1)
+    btn1.place(relx=0.28,rely=0.25, relwidth=0.45,relheight=0.1)
     
     btn2 = Button(root,text="Üye-Kitap İşlemleri",bg='black', fg='white',font=("arial",15,"bold"), command=alinan_kitaplar)
-    btn2.place(relx=0.28,rely=0.4, relwidth=0.45,relheight=0.1)
+    btn2.place(relx=0.28,rely=0.35, relwidth=0.45,relheight=0.1)
     
     btn3 = Button(root,text="Kütüphaneler",bg='black', fg='white',font=("arial",15,"bold"),command=kutuphane)
-    btn3.place(relx=0.28,rely=0.5, relwidth=0.45,relheight=0.1)
+    btn3.place(relx=0.28,rely=0.45, relwidth=0.45,relheight=0.1)
     
     btn4 = Button(root,text="Kategori",bg='black', fg='white',font=("arial",15,"bold"), command=kategori)
-    btn4.place(relx=0.28,rely=0.6, relwidth=0.45,relheight=0.1)
+    btn4.place(relx=0.28,rely=0.55, relwidth=0.45,relheight=0.1)
     
     btn5 = Button(root,text="Yazar",bg='black', fg='white',font=("arial",15,"bold"), command = yazar)
-    btn5.place(relx=0.28,rely=0.7, relwidth=0.45,relheight=0.1)
+    btn5.place(relx=0.28,rely=0.65, relwidth=0.45,relheight=0.1)
 
     btn5 = Button(root,text="Adres",bg='black', fg='white',font=("arial",15,"bold"), command = adres)
-    btn5.place(relx=0.28,rely=0.8, relwidth=0.45,relheight=0.1)
+    btn5.place(relx=0.28,rely=0.75, relwidth=0.45,relheight=0.1)
 
 
 
@@ -1145,7 +1145,7 @@ def kategori():
     
 
     quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
-    quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
+    quitBtn.place(relx=0.02,rely=0.9, relwidth=0.18,relheight=0.08)
 
     
 def yazar():
@@ -1207,7 +1207,7 @@ def yazar():
     
 
     quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
-    quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
+    quitBtn.place(relx=0.02,rely=0.9, relwidth=0.18,relheight=0.08)
 
 
 def adres():
@@ -1265,5 +1265,5 @@ def adres():
     
 
     quitBtn = Button(root,text="<- Menüye Geri Dön",bg='#455A64', fg='white',font=("arial",15,"bold"),command=empMenu)
-    quitBtn.place(relx=0.3,rely=0.9, relwidth=0.18,relheight=0.08)
+    quitBtn.place(relx=0.02,rely=0.9, relwidth=0.18,relheight=0.08)
 
