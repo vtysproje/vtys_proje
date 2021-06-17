@@ -221,12 +221,20 @@ def kitap_işlemleri():
 
         rows2=mycursor.fetchall()
 
-        for row in rows2:
-            print("data row=(%s)" %str(row[0]))
+        for row2 in rows2:
+            yazaridnum=str(row2[0])
 
-        mycursor.execute("SELECT kitap_tablosu.kitap_isbn,kitap_tablosu.kitap_baslik,kitap_tablosu.kitap_yayinevi,kitap_tablosu.kitap_kutuphane_id FROM ((kitap_tablosu INNER JOIN kitapyazar_tablosu ON kitap_tablosu.kitap_isbn=kitapyazar_tablosu.kty_kitap_isbn) INNER JOIN yazar_tablosu ON kitapyazar_tablosu.kty_yazar_id='%s')" % str(row[0]))
+        print(yazaridnum)
 
+        mycursor.execute("SELECT kitap_tablosu.kitap_isbn,kitap_tablosu.kitap_baslik,kitap_tablosu.kitap_yayinevi,kitap_tablosu.kitap_kutuphane_id " \
+    "FROM kitap_tablosu INNER JOIN kitapyazar_tablosu ON kitap_tablosu.kitap_isbn=kitapyazar_tablosu.kty_kitap_isbn " \
+    "INNER JOIN yazar_tablosu ON kitapyazar_tablosu.kty_yazar_id=yazar_tablosu.yazar_id WHERE yazar_tablosu.yazar_id='%s'" % yazaridnum)
+
+ 
         rows=mycursor.fetchall()
+
+
+        print(rows)
         
         if len(rows) !=0:
             kitap_table.delete(*kitap_table.get_children())
